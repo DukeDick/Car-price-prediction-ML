@@ -4,16 +4,12 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.preprocessing import StandardScaler
 
-# 🎯 Load model
+# 🎯 Load the trained Random Forest model
 with open("random_forest_regression_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-# ⚠️ TEMP scaler fit — replace with actual trained scaler if saved
-scaler = StandardScaler()
-
-# Features in correct order
+# Features in correct order (MUST match training)
 features = [
     'Present_Price', 'Driven_kms', 'Owner', 'no_year',
     'Fuel_Type_CNG', 'Fuel_Type_Diesel', 'Fuel_Type_Petrol',
@@ -51,17 +47,16 @@ input_data = [
     *trans_map[transmission]
 ]
 
-# 📏 Scale the input (fit only on this single input for demo)
+# ➕ Wrap in DataFrame (optional)
 input_df = pd.DataFrame([input_data], columns=features)
-scaler.fit(input_df)  # REPLACE with saved scaler if available
-scaled_input = scaler.transform(input_df)
 
-# 🧮 Predict
-log_pred = model.predict(scaled_input)
-predicted_lakhs = np.expm1(log_pred)[0]
+# 🧮 Predict using raw input
+log_pred = model.predict(input_df)
+predicted_lakhs = np.expm1(log_pred)[0]  # undo log1p transformation
 price_in_inr = predicted_lakhs * 100000
-price_in_usd = price_in_inr / 83
+price_in_usd = price_in_inr / 83  # adjust exchange rate if needed
 
 # 📢 Output
 st.subheader("📊 Prediction:")
+st.write(f"**Predicted Selling Price:** ₹{predicted_lakhs:.2f} lakhs")
 st.write(f"**≈ ${price_in_usd:,.2f} USD**")
