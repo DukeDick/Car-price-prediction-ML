@@ -23,7 +23,10 @@ st.title("🚗 Car Price Predictor")
 st.markdown("Estimate your used car's selling price in **USD** using a trained ML model.")
 
 # 🚙 User Inputs
-present_price = st.number_input("Present Price (lakhs INR)", min_value=0.0, step=0.1)
+usd_price = st.number_input("Present Price (USD)", min_value=0.0, step=100.0)
+present_price = (usd_price * 83) / 100000  # Convert USD to lakhs INR
+st.caption("_Note: Internally converted to ₹ lakhs for model input (1 USD ≈ ₹83)_")
+
 driven_kms = st.number_input("Driven Kilometers", min_value=0)
 owner = st.selectbox("Number of Owners", [0, 1, 2, 3])
 year = st.slider("Year of Purchase", 2003, 2022)
@@ -32,6 +35,7 @@ no_year = 2023 - year
 fuel_type = st.selectbox("Fuel Type", ['Petrol', 'Diesel', 'CNG'])
 selling_type = st.selectbox("Seller Type", ['Dealer', 'Individual'])
 transmission = st.selectbox("Transmission Type", ['Manual', 'Automatic'])
+
 
 # 🔧 One-hot encoding manually
 fuel_map = {'Petrol': [0, 0, 1], 'Diesel': [0, 1, 0], 'CNG': [1, 0, 0]}
