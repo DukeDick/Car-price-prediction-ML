@@ -59,5 +59,4 @@ if st.button("Predict"):
 
     # 📢 Output
     st.subheader("📊 Prediction:")
-    st.write(f"**Predicted Selling Price:** ₹{predicted_lakhs:.2f} lakhs")
     st.write(f"**≈ ${price_in_usd:,.2f} USD**")
