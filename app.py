@@ -1,9 +1,10 @@
 # app.py
 
 import streamlit as st
-import numpy as np
 import pandas as pd
+import numpy as np
 import pickle
+from sklearn.ensemble import RandomForestRegressor  # ← Needed if model uses this
 
 # 🎯 Load the trained Random Forest model
 with open("random_forest_regression_model.pkl", "rb") as f:
